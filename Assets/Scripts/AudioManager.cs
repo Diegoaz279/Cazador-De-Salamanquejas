@@ -36,8 +36,8 @@ public class AudioManager : MonoBehaviour
         else { Destroy(gameObject); return; }
 
         silenciado    = PlayerPrefs.GetInt("Silenciado", 0) == 1;
-        volMusica     = PlayerPrefs.GetFloat("VolMusica", 0.6f);
-        volEfectos    = PlayerPrefs.GetFloat("VolEfectos", 1.0f);
+        volMusica     = PlayerPrefs.GetFloat("VolMusica", 0.4f);
+        volEfectos    = PlayerPrefs.GetFloat("VolEfectos", 2.0f);
         cancionActual = PlayerPrefs.GetInt("CancionActual", 0);
 
         if (musicaSource  != null) musicaSource.volume  = silenciado ? 0f : volMusica;

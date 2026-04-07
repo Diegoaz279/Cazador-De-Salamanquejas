@@ -1,21 +1,24 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections.Generic;
 
 public class Spawner : MonoBehaviour
 {
-    [Header("Puntos de spawn (los hoyos del mapa)")]
+    [Header("Puntos de spawn")]
     [SerializeField] private List<Transform> puntosSpawn = new List<Transform>();
 
     [Header("Prefab")]
     [SerializeField] private GameObject prefabSalamanqueja;
-    [SerializeField] private int        tamanoPool    = 20;
-    [SerializeField] private int        maximasActivas = 6;
+    [SerializeField] private int tamanoPool = 20;
+    [SerializeField] private int maximasActivas = 6;
 
     [Header("Tiempo entre spawns")]
     [SerializeField] private float tiempoSpawn = 2.5f;
 
-    private List<GameObject> pool  = new List<GameObject>();
-    private float            timer = 0f;
+    [Header("Dificultad del nivel (0=Sala, 1=Patio)")]
+    [SerializeField] private int nivelDificultad = 0;
+
+    private List<GameObject> pool = new List<GameObject>();
+    private float timer = 0f;
 
     void Start() => CrearPool();
 
@@ -56,21 +59,47 @@ public class Spawner : MonoBehaviour
         int oleada = GameManager.Instance != null ? GameManager.Instance.Oleada : 1;
         float r = Random.value;
 
+        // ── NIVEL 0: SALA (facil) ────────────────────────────
+        if (nivelDificultad == 0)
+        {
+            if (oleada == 1)
+            {
+                // Solo normales con pocas rapidas
+                return r < 0.85f ? Salamanqueja.Tipo.Normal : Salamanqueja.Tipo.Rapida;
+            }
+            if (oleada == 2)
+            {
+                if (r < 0.5f) return Salamanqueja.Tipo.Normal;
+                if (r < 0.85f) return Salamanqueja.Tipo.Rapida;
+                return Salamanqueja.Tipo.Resistente;
+            }
+            // Oleada 3 sala
+            if (r < 0.3f) return Salamanqueja.Tipo.Normal;
+            if (r < 0.6f) return Salamanqueja.Tipo.Rapida;
+            if (r < 0.85f) return Salamanqueja.Tipo.Resistente;
+            return Salamanqueja.Tipo.Dorada;
+        }
+
+        // ── NIVEL 1: PATIO (dificil) ─────────────────────────
+        // Desde oleada 1 ya hay variedad, mas resistentes y doradas
         if (oleada == 1)
         {
-            // Oleada 1: mayoria normales, pocas rapidas
-            return r < 0.8f ? Salamanqueja.Tipo.Normal : Salamanqueja.Tipo.Rapida;
+            if (r < 0.4f) return Salamanqueja.Tipo.Normal;
+            if (r < 0.75f) return Salamanqueja.Tipo.Rapida;
+            if (r < 0.95f) return Salamanqueja.Tipo.Resistente;
+            return Salamanqueja.Tipo.Dorada;
         }
         if (oleada == 2)
         {
-            if (r < 0.5f) return Salamanqueja.Tipo.Normal;
-            if (r < 0.8f) return Salamanqueja.Tipo.Rapida;
-            return Salamanqueja.Tipo.Resistente;
+            if (r < 0.2f) return Salamanqueja.Tipo.Normal;
+            if (r < 0.55f) return Salamanqueja.Tipo.Rapida;
+            if (r < 0.85f) return Salamanqueja.Tipo.Resistente;
+            return Salamanqueja.Tipo.Dorada;
         }
-        // Oleada 3
-        if (r < 0.25f) return Salamanqueja.Tipo.Normal;
-        if (r < 0.55f) return Salamanqueja.Tipo.Rapida;
-        if (r < 0.85f) return Salamanqueja.Tipo.Resistente;
+        // Oleada 3 patio - pesadilla
+        if (r < 0.1f) return Salamanqueja.Tipo.Normal;
+        if (r < 0.4f) return Salamanqueja.Tipo.Rapida;
+        if (r < 0.75f) return Salamanqueja.Tipo.Resistente;
         return Salamanqueja.Tipo.Dorada;
     }
 
