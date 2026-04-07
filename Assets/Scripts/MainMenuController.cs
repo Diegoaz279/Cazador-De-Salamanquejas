@@ -3,29 +3,11 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuController : MonoBehaviour
 {
-    [Header("Nombre de la escena del juego")]
-    [SerializeField] private string escenaJuego = "Level_Sala";
+    [SerializeField] private string      escenaJuego   = "Level_Sala";
+    [SerializeField] private GameObject  panelOpciones;
 
-    [Header("Panel de opciones (opcional)")]
-    [SerializeField] private GameObject panelOpciones;
-
-    public void Jugar()
-    {
-        SceneManager.LoadScene(escenaJuego);
-    }
-
-    public void AbrirOpciones()
-    {
-        if (panelOpciones != null) panelOpciones.SetActive(true);
-    }
-
-    public void CerrarOpciones()
-    {
-        if (panelOpciones != null) panelOpciones.SetActive(false);
-    }
-
-    public void Salir()
-    {
-        Application.Quit();
-    }
+    public void Jugar()          => SceneManager.LoadScene(escenaJuego);
+    public void AbrirOpciones()  => panelOpciones?.SetActive(true);
+    public void CerrarOpciones() => panelOpciones?.SetActive(false);
+    public void Salir()          => Application.Quit();
 }

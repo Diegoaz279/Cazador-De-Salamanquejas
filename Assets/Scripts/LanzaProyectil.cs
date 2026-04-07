@@ -2,8 +2,7 @@ using UnityEngine;
 
 public class LanzaProyectil : MonoBehaviour
 {
-    [SerializeField] private float       radio       = 0.4f;
-    [SerializeField] private LayerMask   capaEnemigos;
+    [SerializeField] private float radio = 0.5f;
 
     private Vector2 dir;
     private float   vel;
@@ -13,11 +12,12 @@ public class LanzaProyectil : MonoBehaviour
 
     public void Configurar(Vector2 direccion, float velocidad, float distanciaMax)
     {
-        dir     = direccion.normalized;
-        vel     = velocidad;
+        dir    = direccion.normalized;
+        vel    = velocidad;
         distMax = distanciaMax;
         origen  = transform.position;
 
+        // Rotar el sprite para apuntar en la direccion correcta
         float angulo = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90f;
         transform.rotation = Quaternion.Euler(0f, 0f, angulo);
     }
@@ -30,12 +30,16 @@ public class LanzaProyectil : MonoBehaviour
 
         if (Vector2.Distance(origen, transform.position) >= distMax)
         {
-            Destruir(); return;
+            Destruir();
+            return;
         }
 
-        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, radio, capaEnemigos);
+        // Detectar colision con salamanquejas (sin depender de Layers)
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, radio);
         foreach (Collider2D h in hits)
         {
+            if (h.CompareTag("Player")) continue; // ignorar al jugador
+
             Salamanqueja sal = h.GetComponent<Salamanqueja>();
             if (sal != null && sal.EstaViva)
             {
@@ -50,5 +54,11 @@ public class LanzaProyectil : MonoBehaviour
     {
         activa = false;
         Destroy(gameObject, 0.05f);
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, radio);
     }
 }

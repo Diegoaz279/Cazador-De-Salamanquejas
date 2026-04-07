@@ -10,15 +10,16 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI textoVidas;
     [SerializeField] private TextMeshProUGUI textoOleada;
     [SerializeField] private TextMeshProUGUI textoContador;
+    [SerializeField] private TextMeshProUGUI textoLanzas;   // NUEVO
 
     [Header("Mensaje central")]
     [SerializeField] private GameObject      panelMensaje;
     [SerializeField] private TextMeshProUGUI textoMensaje;
 
-    [Header("Flash de daño")]
+    [Header("Flash de daño (Image roja sobre toda la pantalla)")]
     [SerializeField] private Image imagenFlash;
 
-    [Header("Pausa")]
+    [Header("Panel Pausa")]
     [SerializeField] private GameObject panelPausa;
 
     [Header("Iconos de vidas (opcional)")]
@@ -28,10 +29,7 @@ public class UIManager : MonoBehaviour
     {
         panelPausa?.SetActive(false);
         panelMensaje?.SetActive(false);
-        if (imagenFlash != null)
-        {
-            Color c = imagenFlash.color; c.a = 0f; imagenFlash.color = c;
-        }
+        ResetFlash();
     }
 
     void Update()
@@ -39,19 +37,25 @@ public class UIManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape)) TogglePausa();
     }
 
-    // Llamado por GameManager
+    // ── ACTUALIZAR UI ─────────────────────────────────────────
     public void Actualizar(int puntos, int vidas, int oleada, int eliminados, int objetivo)
     {
         if (textoPuntuacion != null) textoPuntuacion.text = $"RD$ {puntos}";
         if (textoOleada     != null) textoOleada.text     = $"Oleada {oleada}";
         if (textoVidas      != null) textoVidas.text      = $"Vidas: {vidas}";
-        if (textoContador   != null) textoContador.text   = $"Salamanquejas: {eliminados} / {objetivo}";
+        if (textoContador   != null) textoContador.text   = $"🦎 {eliminados} / {objetivo}";
 
         if (iconosVidas != null)
             for (int i = 0; i < iconosVidas.Length; i++)
                 if (iconosVidas[i] != null) iconosVidas[i].SetActive(i < vidas);
     }
 
+    public void ActualizarLanzas(int restantes)
+    {
+        if (textoLanzas != null) textoLanzas.text = $"🪃 Lanzas: {restantes}";
+    }
+
+    // ── MENSAJES ──────────────────────────────────────────────
     public void MostrarMensaje(string msg)
     {
         if (textoMensaje != null) textoMensaje.text = msg;
@@ -66,6 +70,7 @@ public class UIManager : MonoBehaviour
         panelMensaje?.SetActive(false);
     }
 
+    // ── FLASH DE DAÑO ─────────────────────────────────────────
     public void MostrarFlash()
     {
         if (imagenFlash != null) StartCoroutine(Flash());
@@ -77,18 +82,28 @@ public class UIManager : MonoBehaviour
         while (t < dur)
         {
             t += Time.deltaTime;
-            Color c = imagenFlash.color; c.a = Mathf.Lerp(0f, 0.5f, t / dur); imagenFlash.color = c;
+            SetFlashAlpha(Mathf.Lerp(0f, 0.55f, t / dur));
             yield return null;
         }
         t = 0f;
         while (t < dur)
         {
             t += Time.deltaTime;
-            Color c = imagenFlash.color; c.a = Mathf.Lerp(0.5f, 0f, t / dur); imagenFlash.color = c;
+            SetFlashAlpha(Mathf.Lerp(0.55f, 0f, t / dur));
             yield return null;
         }
+        SetFlashAlpha(0f);
     }
 
+    void SetFlashAlpha(float a)
+    {
+        if (imagenFlash == null) return;
+        Color c = imagenFlash.color; c.a = a; imagenFlash.color = c;
+    }
+
+    void ResetFlash() { SetFlashAlpha(0f); }
+
+    // ── PAUSA ─────────────────────────────────────────────────
     void TogglePausa()
     {
         if (panelPausa == null) return;
@@ -104,9 +119,12 @@ public class UIManager : MonoBehaviour
         GameManager.Instance?.ReanudarJuego();
     }
 
-    // Compatibilidad con botones viejos
+    // Compatibilidad
     public void ActualizarUI(int p, int v, int o, int e, int obj) => Actualizar(p, v, o, e, obj);
-    public void MostrarFlashDanio() => MostrarFlash();
-    public void MostrarMensajeOleada(string m) => MostrarMensaje(m);
-    public void ActualizarContador(int e, int obj) { if (textoContador != null) textoContador.text = $"Salamanquejas: {e} / {obj}"; }
+    public void MostrarFlashDanio()                                => MostrarFlash();
+    public void MostrarMensajeOleada(string m)                    => MostrarMensaje(m);
+    public void ActualizarContador(int e, int obj)
+    {
+        if (textoContador != null) textoContador.text = $"🦎 {e} / {obj}";
+    }
 }

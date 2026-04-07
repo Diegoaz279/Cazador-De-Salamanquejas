@@ -6,32 +6,24 @@ public class Spawner : MonoBehaviour
     [Header("Puntos de spawn (los hoyos del mapa)")]
     [SerializeField] private List<Transform> puntosSpawn = new List<Transform>();
 
-    [Header("Prefab de la salamanqueja")]
+    [Header("Prefab")]
     [SerializeField] private GameObject prefabSalamanqueja;
     [SerializeField] private int        tamanoPool    = 20;
-    [SerializeField] private int        maximasActivas = 5;
+    [SerializeField] private int        maximasActivas = 6;
 
     [Header("Tiempo entre spawns")]
-    [SerializeField] private float tiempoSpawn = 3f;
+    [SerializeField] private float tiempoSpawn = 2.5f;
 
     private List<GameObject> pool  = new List<GameObject>();
     private float            timer = 0f;
 
-    void Start()
-    {
-        CrearPool();
-    }
+    void Start() => CrearPool();
 
     void Update()
     {
         if (GameManager.Instance == null || !GameManager.Instance.JuegoActivo) return;
-
         timer += Time.deltaTime;
-        if (timer >= tiempoSpawn)
-        {
-            timer = 0f;
-            Spawn();
-        }
+        if (timer >= tiempoSpawn) { timer = 0f; Spawn(); }
     }
 
     void CrearPool()
@@ -47,7 +39,6 @@ public class Spawner : MonoBehaviour
     void Spawn()
     {
         if (puntosSpawn.Count == 0 || ContarActivas() >= maximasActivas) return;
-
         GameObject obj = ObtenerLibre();
         if (obj == null) return;
 
@@ -65,17 +56,21 @@ public class Spawner : MonoBehaviour
         int oleada = GameManager.Instance != null ? GameManager.Instance.Oleada : 1;
         float r = Random.value;
 
-        if (oleada == 1) return Salamanqueja.Tipo.Normal;
+        if (oleada == 1)
+        {
+            // Oleada 1: mayoria normales, pocas rapidas
+            return r < 0.8f ? Salamanqueja.Tipo.Normal : Salamanqueja.Tipo.Rapida;
+        }
         if (oleada == 2)
         {
-            if (r < 0.6f) return Salamanqueja.Tipo.Normal;
-            if (r < 0.9f) return Salamanqueja.Tipo.Rapida;
+            if (r < 0.5f) return Salamanqueja.Tipo.Normal;
+            if (r < 0.8f) return Salamanqueja.Tipo.Rapida;
             return Salamanqueja.Tipo.Resistente;
         }
-        // oleada 3
-        if (r < 0.3f) return Salamanqueja.Tipo.Normal;
-        if (r < 0.6f) return Salamanqueja.Tipo.Rapida;
-        if (r < 0.9f) return Salamanqueja.Tipo.Resistente;
+        // Oleada 3
+        if (r < 0.25f) return Salamanqueja.Tipo.Normal;
+        if (r < 0.55f) return Salamanqueja.Tipo.Rapida;
+        if (r < 0.85f) return Salamanqueja.Tipo.Resistente;
         return Salamanqueja.Tipo.Dorada;
     }
 
@@ -89,8 +84,7 @@ public class Spawner : MonoBehaviour
     int ContarActivas()
     {
         int n = 0;
-        foreach (GameObject obj in pool)
-            if (obj.activeInHierarchy) n++;
+        foreach (GameObject obj in pool) if (obj.activeInHierarchy) n++;
         return n;
     }
 

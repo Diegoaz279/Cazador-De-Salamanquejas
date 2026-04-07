@@ -3,24 +3,24 @@
   "WorkspaceRootPath": "C:\\ProyectosUCE\\CazadorDeSalamanquejas\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{B5F2B8C2-9877-F61A-FE03-1C97069B0574}|Assembly-CSharp.csproj|c:\\proyectosuce\\cazadordesalamanquejas\\assets\\scripts\\playercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B5F2B8C2-9877-F61A-FE03-1C97069B0574}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\playercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B5F2B8C2-9877-F61A-FE03-1C97069B0574}|Assembly-CSharp.csproj|c:\\proyectosuce\\cazadordesalamanquejas\\assets\\scripts\\lanzaproyectil.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B5F2B8C2-9877-F61A-FE03-1C97069B0574}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\lanzaproyectil.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B5F2B8C2-9877-F61A-FE03-1C97069B0574}|Assembly-CSharp.csproj|C:\\ProyectosUCE\\CazadorDeSalamanquejas\\assets\\scripts\\salamanqueja.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B5F2B8C2-9877-F61A-FE03-1C97069B0574}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\salamanqueja.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{B5F2B8C2-9877-F61A-FE03-1C97069B0574}|Assembly-CSharp.csproj|C:\\ProyectosUCE\\CazadorDeSalamanquejas\\assets\\scripts\\spawner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B5F2B8C2-9877-F61A-FE03-1C97069B0574}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\spawner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{B5F2B8C2-9877-F61A-FE03-1C97069B0574}|Assembly-CSharp.csproj|C:\\ProyectosUCE\\CazadorDeSalamanquejas\\assets\\scripts\\gameovercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B5F2B8C2-9877-F61A-FE03-1C97069B0574}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\gameovercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B5F2B8C2-9877-F61A-FE03-1C97069B0574}|Assembly-CSharp.csproj|C:\\ProyectosUCE\\CazadorDeSalamanquejas\\assets\\scripts\\salamanqueja.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B5F2B8C2-9877-F61A-FE03-1C97069B0574}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\salamanqueja.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B5F2B8C2-9877-F61A-FE03-1C97069B0574}|Assembly-CSharp.csproj|c:\\proyectosuce\\cazadordesalamanquejas\\assets\\scripts\\playercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B5F2B8C2-9877-F61A-FE03-1C97069B0574}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\playercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B5F2B8C2-9877-F61A-FE03-1C97069B0574}|Assembly-CSharp.csproj|C:\\ProyectosUCE\\CazadorDeSalamanquejas\\assets\\scripts\\lanzaproyectil.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B5F2B8C2-9877-F61A-FE03-1C97069B0574}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\lanzaproyectil.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{B5F2B8C2-9877-F61A-FE03-1C97069B0574}|Assembly-CSharp.csproj|C:\\ProyectosUCE\\CazadorDeSalamanquejas\\assets\\scripts\\uimanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -71,40 +71,28 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "PlayerController.cs",
-              "DocumentMoniker": "C:\\ProyectosUCE\\CazadorDeSalamanquejas\\Assets\\Scripts\\PlayerController.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\PlayerController.cs",
-              "ToolTip": "C:\\ProyectosUCE\\CazadorDeSalamanquejas\\Assets\\Scripts\\PlayerController.cs",
-              "RelativeToolTip": "Assets\\Scripts\\PlayerController.cs",
-              "ViewState": "AgIAAJgAAAAAAAAAAAAuwAAAAAAAAAAAAAAAAA==",
+              "Title": "Spawner.cs",
+              "DocumentMoniker": "C:\\ProyectosUCE\\CazadorDeSalamanquejas\\Assets\\Scripts\\Spawner.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Spawner.cs",
+              "ToolTip": "C:\\ProyectosUCE\\CazadorDeSalamanquejas\\Assets\\Scripts\\Spawner.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Spawner.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAAywDAAAAArAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-05T22:30:17.154Z",
+              "WhenOpened": "2026-03-05T19:55:24.49Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "LanzaProyectil.cs",
-              "DocumentMoniker": "C:\\ProyectosUCE\\CazadorDeSalamanquejas\\Assets\\Scripts\\LanzaProyectil.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\LanzaProyectil.cs",
-              "ToolTip": "C:\\ProyectosUCE\\CazadorDeSalamanquejas\\Assets\\Scripts\\LanzaProyectil.cs",
-              "RelativeToolTip": "Assets\\Scripts\\LanzaProyectil.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAA0AAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "Salamanqueja.cs",
+              "DocumentMoniker": "C:\\ProyectosUCE\\CazadorDeSalamanquejas\\Assets\\Scripts\\Salamanqueja.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Salamanqueja.cs",
+              "ToolTip": "C:\\ProyectosUCE\\CazadorDeSalamanquejas\\Assets\\Scripts\\Salamanqueja.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Salamanqueja.cs",
+              "ViewState": "AgIAAMYAAAAAAAAAAAAuwP8AAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-05T20:21:24.25Z",
+              "WhenOpened": "2026-03-05T19:54:59.462Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "GameOverController.cs",
-              "DocumentMoniker": "C:\\ProyectosUCE\\CazadorDeSalamanquejas\\Assets\\Scripts\\GameOverController.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\GameOverController.cs",
-              "ToolTip": "C:\\ProyectosUCE\\CazadorDeSalamanquejas\\Assets\\Scripts\\GameOverController.cs",
-              "RelativeToolTip": "Assets\\Scripts\\GameOverController.cs",
-              "ViewState": "AgIAAB8AAAAAAAAAAAAowDIAAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-05T19:56:19.053Z"
             },
             {
               "$type": "Document",
@@ -120,27 +108,41 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Spawner.cs",
-              "DocumentMoniker": "C:\\ProyectosUCE\\CazadorDeSalamanquejas\\Assets\\Scripts\\Spawner.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\Spawner.cs",
-              "ToolTip": "C:\\ProyectosUCE\\CazadorDeSalamanquejas\\Assets\\Scripts\\Spawner.cs",
-              "RelativeToolTip": "Assets\\Scripts\\Spawner.cs",
-              "ViewState": "AgIAAFkAAAAAAAAAAAAowHQAAAABAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "GameOverController.cs",
+              "DocumentMoniker": "C:\\ProyectosUCE\\CazadorDeSalamanquejas\\Assets\\Scripts\\GameOverController.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\GameOverController.cs",
+              "ToolTip": "C:\\ProyectosUCE\\CazadorDeSalamanquejas\\Assets\\Scripts\\GameOverController.cs",
+              "RelativeToolTip": "Assets\\Scripts\\GameOverController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACUAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-05T19:55:24.49Z"
+              "WhenOpened": "2026-03-05T19:56:19.053Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Salamanqueja.cs",
-              "DocumentMoniker": "C:\\ProyectosUCE\\CazadorDeSalamanquejas\\Assets\\Scripts\\Salamanqueja.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\Salamanqueja.cs",
-              "ToolTip": "C:\\ProyectosUCE\\CazadorDeSalamanquejas\\Assets\\Scripts\\Salamanqueja.cs",
-              "RelativeToolTip": "Assets\\Scripts\\Salamanqueja.cs",
-              "ViewState": "AgIAAKAAAAAAAAAAAAAwwLQAAAABAAAAAAAAAA==",
+              "DocumentIndex": 4,
+              "Title": "LanzaProyectil.cs",
+              "DocumentMoniker": "C:\\ProyectosUCE\\CazadorDeSalamanquejas\\Assets\\Scripts\\LanzaProyectil.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\LanzaProyectil.cs",
+              "ToolTip": "C:\\ProyectosUCE\\CazadorDeSalamanquejas\\Assets\\Scripts\\LanzaProyectil.cs",
+              "RelativeToolTip": "Assets\\Scripts\\LanzaProyectil.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAA0AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-05T19:54:59.462Z"
+              "WhenOpened": "2026-03-05T20:21:24.25Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "PlayerController.cs",
+              "DocumentMoniker": "C:\\ProyectosUCE\\CazadorDeSalamanquejas\\Assets\\Scripts\\PlayerController.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\PlayerController.cs",
+              "ToolTip": "C:\\ProyectosUCE\\CazadorDeSalamanquejas\\Assets\\Scripts\\PlayerController.cs",
+              "RelativeToolTip": "Assets\\Scripts\\PlayerController.cs",
+              "ViewState": "AgIAAJgAAAAAAAAAAAAuwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-05T22:30:17.154Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
