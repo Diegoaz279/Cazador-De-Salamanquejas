@@ -67,8 +67,13 @@ public class GameManager : MonoBehaviour
         // Zona de puerta desactivada al inicio
         if (zonaPuerta != null) zonaPuerta.SetActive(false);
 
-        spawner?.ActualizarTiempoSpawn(spawnOleada1);
-        AudioManager.Instance?.ReproducirMusicaSala();
+        // Forzar cambio de musica al entrar al nivel
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.DetenerMusica();
+            AudioManager.Instance.ReproducirMusicaSala();
+        }
+
         RefrescarUI();
     }
 

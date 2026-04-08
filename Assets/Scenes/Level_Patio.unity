@@ -365,10 +365,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   velocidad: 8
-  limiteIzq: -7.5
+  limiteIzq: -8.5
   limiteDer: 7.5
   limiteAbajo: -3.5
-  limiteArriba: 1.5
+  limiteArriba: 1
   prefabLanza: {fileID: 2531847391286173314, guid: 6d576d024f8b0a0408d90b9a23dbb0c5, type: 3}
   velocidadLanza: 12
   distanciaMaxima: 8
@@ -2009,8 +2009,8 @@ MonoBehaviour:
   - {fileID: 955049199}
   - {fileID: 251068158}
   prefabSalamanqueja: {fileID: 9183581514791820208, guid: ed9a5b914533b9248b8a2f748fcbbc71, type: 3}
-  tamanoPool: 30
-  maximasActivas: 8
+  tamanoPool: 20
+  maximasActivas: 5
   tiempoSpawn: 1.8
   nivelDificultad: 1
 --- !u!114 &1775716530
