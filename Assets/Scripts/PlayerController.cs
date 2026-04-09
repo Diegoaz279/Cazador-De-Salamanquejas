@@ -2,76 +2,79 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    // ── MOVIMIENTO ──────────────────────────────────────────
     [Header("Movimiento")]
     [SerializeField] private float velocidad = 5f;
 
-    [Header("Limites del mapa (ajusta segun tu escena)")]
-    [SerializeField] private float limiteIzq  = -7.5f;
-    [SerializeField] private float limiteDer  =  7.5f;
+    [Header("Limites del mapa")]
+    [SerializeField] private float limiteIzq   = -7.5f;
+    [SerializeField] private float limiteDer   =  7.5f;
     [SerializeField] private float limiteAbajo = -3.5f;
-    [SerializeField] private float limiteArriba =  1.5f;
+    [SerializeField] private float limiteArriba=  1.5f;
 
-    // ── LANZA ───────────────────────────────────────────────
     [Header("Lanza")]
     [SerializeField] private GameObject prefabLanza;
-    [SerializeField] private float velocidadLanza  = 15f;
-    [SerializeField] private float distanciaMaxima =  8f;
-    [SerializeField] private float cooldown        =  0.3f;
+    [SerializeField] private float velocidadLanza   = 15f;
+    [SerializeField] private float distanciaMaxima  =  8f;
+    [SerializeField] private float cooldown         =  0.3f;
 
     [Header("Lanzas limitadas")]
     [SerializeField] private int lanzasIniciales = 20;
 
-    // ── SPRITES PERSONAJE ───────────────────────────────────
-    [Header("Sprites del personaje")]
-    [SerializeField] private Sprite spriteIdle;
-    [SerializeField] private Sprite spriteWalk1;
-    [SerializeField] private Sprite spriteWalk2;
-    [SerializeField] private Sprite spriteRun1;
-    [SerializeField] private Sprite spriteRun2;
-    [SerializeField] private Sprite spriteAtaqueH;
-    [SerializeField] private Sprite spriteAtaqueV;
+    [Header("Sprites Personaje 1 (chancleta)")]
+    [SerializeField] private Sprite p1Idle;
+    [SerializeField] private Sprite p1Walk1;
+    [SerializeField] private Sprite p1Walk2;
+    [SerializeField] private Sprite p1Run1;
+    [SerializeField] private Sprite p1Run2;
+    [SerializeField] private Sprite p1AtaqueH;
+    [SerializeField] private Sprite p1AtaqueV;
 
-    // ── ABUELA ──────────────────────────────────────────────
-    [Header("Abuela (arrastra su GameObject aqui)")]
-    [SerializeField] private Transform abuela;
-    [SerializeField] private float offsetAbuela = -0.6f; // distancia detras del jugador
-    [SerializeField] private float velocidadAbuela = 4f;
+    [Header("Sprites Personaje 2 (camisa negra)")]
+    [SerializeField] private Sprite p2Idle;
+    [SerializeField] private Sprite p2Walk1;
+    [SerializeField] private Sprite p2Walk2;
+    [SerializeField] private Sprite p2Run1;
+    [SerializeField] private Sprite p2Run2;
+    [SerializeField] private Sprite p2AtaqueH;
+    [SerializeField] private Sprite p2AtaqueV;
 
-    [Header("Sprites de la abuela")]
-    [SerializeField] private Sprite abuelaFrente;   // Abuela1
-    [SerializeField] private Sprite abuelaEspalda;  // Abuela2
-    [SerializeField] private Sprite abuelaDerecha;  // Abuela3
-    [SerializeField] private Sprite abuelaIzquierda;// Abuela4
+    [Header("Abuela")]
+    [SerializeField] private Transform       abuela;
+    [SerializeField] private float           offsetAbuela    = 0.6f;
+    [SerializeField] private float           velocidadAbuela = 4f;
+    [SerializeField] private Sprite          abuelaFrente;
+    [SerializeField] private Sprite          abuelaEspalda;
+    [SerializeField] private Sprite          abuelaDerecha;
+    [SerializeField] private Sprite          abuelaIzquierda;
 
-    // ── PRIVADOS ─────────────────────────────────────────────
-    private Rigidbody2D  rb;
+    // Privados
+    private Rigidbody2D    rb;
     private SpriteRenderer sr;
     private SpriteRenderer srAbuela;
-    private Camera       cam;
+    private Camera         cam;
 
     private Vector2 movimiento;
-    private bool    puedeDisparar = true;
-    private bool    atacando      = false;
-    private float   timerAnim     = 0f;
-    private int     frameAnim     = 0;
+    private Vector2 ultimaDireccion = Vector2.right;
+    private Vector2 dirMouse        = Vector2.right;
+    private bool    puedeDisparar   = true;
+    private bool    atacando        = false;
+    private float   timerAnim       = 0f;
+    private int     frameAnim       = 0;
     private int     lanzasRestantes;
-
-    // Ultima direccion del mouse respecto al jugador
-    private Vector2 dirMouse = Vector2.right;
+    private int     personajeActual = 0; // 0 = p1, 1 = p2
 
     void Awake()
     {
         rb  = GetComponent<Rigidbody2D>();
         sr  = GetComponent<SpriteRenderer>();
         cam = Camera.main;
-
-        if (abuela != null)
-            srAbuela = abuela.GetComponent<SpriteRenderer>();
+        if (abuela != null) srAbuela = abuela.GetComponent<SpriteRenderer>();
     }
 
     void Start()
     {
+        // Leer personaje seleccionado en el menu
+        personajeActual = PlayerPrefs.GetInt("PersonajeSeleccionado", 0);
         lanzasRestantes = lanzasIniciales;
         GameManager.Instance?.ActualizarLanzas(lanzasRestantes);
     }
@@ -80,7 +83,11 @@ public class PlayerController : MonoBehaviour
     {
         if (GameManager.Instance == null || !GameManager.Instance.JuegoActivo) return;
 
-        LeerMovimiento();
+        float x = Input.GetAxisRaw("Horizontal");
+        float y = Input.GetAxisRaw("Vertical");
+        movimiento = new Vector2(x, y).normalized;
+        if (movimiento != Vector2.zero) ultimaDireccion = movimiento;
+
         ActualizarDireccionMouse();
         AnimarPersonaje();
         MoverAbuela();
@@ -92,130 +99,90 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         if (GameManager.Instance == null || !GameManager.Instance.JuegoActivo) return;
-
-        // Mover y limitar dentro del mapa
         Vector2 nuevaPos = rb.position + movimiento * velocidad * Time.fixedDeltaTime;
-        nuevaPos.x = Mathf.Clamp(nuevaPos.x, limiteIzq,   limiteDer);
-        nuevaPos.y = Mathf.Clamp(nuevaPos.y, limiteAbajo,  limiteArriba);
+        nuevaPos.x = Mathf.Clamp(nuevaPos.x, limiteIzq,    limiteDer);
+        nuevaPos.y = Mathf.Clamp(nuevaPos.y, limiteAbajo,   limiteArriba);
         rb.MovePosition(nuevaPos);
     }
 
-    // ── INPUT ─────────────────────────────────────────────────
-    void LeerMovimiento()
-    {
-        float x = Input.GetAxisRaw("Horizontal");
-        float y = Input.GetAxisRaw("Vertical");
-        movimiento = new Vector2(x, y).normalized;
-    }
-
-    // Calcula la direccion desde el jugador hasta donde esta el mouse en el mundo
     void ActualizarDireccionMouse()
     {
-        Vector3 mouseMundo = cam.ScreenToWorldPoint(Input.mousePosition);
-        mouseMundo.z = 0f;
-        Vector2 diff = (Vector2)(mouseMundo - transform.position);
-        if (diff.magnitude > 0.1f)
-            dirMouse = diff.normalized;
+        Vector3 mw = cam.ScreenToWorldPoint(Input.mousePosition);
+        mw.z = 0f;
+        Vector2 diff = (Vector2)(mw - transform.position);
+        if (diff.magnitude > 0.1f) dirMouse = diff.normalized;
     }
 
-    // ── ANIMACION PERSONAJE ───────────────────────────────────
+    // Devuelve el sprite correcto segun personaje activo
+    Sprite Sprite(Sprite s1, Sprite s2) => personajeActual == 0 ? s1 : s2;
+
     void AnimarPersonaje()
     {
         if (atacando) return;
-
         timerAnim += Time.deltaTime;
         if (timerAnim >= 0.15f) { timerAnim = 0f; frameAnim = 1 - frameAnim; }
 
         if (movimiento == Vector2.zero)
         {
-            if (spriteIdle != null) sr.sprite = spriteIdle;
+            Sprite s = Sprite(p1Idle, p2Idle);
+            if (s != null) sr.sprite = s;
         }
         else if (movimiento.magnitude > 0.7f)
         {
-            Sprite r = frameAnim == 0 ? spriteRun1 : spriteRun2;
-            if (r != null) sr.sprite = r;
+            Sprite s = frameAnim == 0 ? Sprite(p1Run1, p2Run1) : Sprite(p1Run2, p2Run2);
+            if (s != null) sr.sprite = s;
         }
         else
         {
-            Sprite w = frameAnim == 0 ? spriteWalk1 : spriteWalk2;
-            if (w != null) sr.sprite = w;
+            Sprite s = frameAnim == 0 ? Sprite(p1Walk1, p2Walk1) : Sprite(p1Walk2, p2Walk2);
+            if (s != null) sr.sprite = s;
         }
 
         if (movimiento.x > 0) sr.flipX = false;
         else if (movimiento.x < 0) sr.flipX = true;
     }
 
-    // ── ABUELA ───────────────────────────────────────────────
     void MoverAbuela()
     {
         if (abuela == null) return;
-
-        // La abuela sigue al jugador con un poco de retraso
-        Vector3 destino = transform.position + new Vector3(-movimiento.x * offsetAbuela,
-                                                            -movimiento.y * offsetAbuela * 0.5f, 0f);
-        // Si esta quieto, la abuela se queda separada detras y a la izquierda del jugador
-        if (movimiento == Vector2.zero)
-            destino = transform.position + new Vector3(-0.5f, -0.6f, 0f);
+        Vector3 destino = movimiento == Vector2.zero
+            ? transform.position + new Vector3(-0.5f, -0.6f, 0f)
+            : transform.position + new Vector3(-movimiento.x * offsetAbuela,
+                                               -movimiento.y * offsetAbuela * 0.5f, 0f);
 
         abuela.position = Vector3.MoveTowards(abuela.position, destino,
                                                velocidadAbuela * Time.deltaTime);
-
-        // Animar sprite de la abuela segun direccion del jugador
         if (srAbuela == null) return;
 
         if (movimiento == Vector2.zero)
-        {
-            if (abuelaFrente != null) srAbuela.sprite = abuelaFrente;
-        }
+        { if (abuelaFrente != null) srAbuela.sprite = abuelaFrente; }
         else if (Mathf.Abs(movimiento.x) > Mathf.Abs(movimiento.y))
         {
-            // Movimiento horizontal
-            if (movimiento.x > 0)
-            {
-                if (abuelaDerecha != null) { srAbuela.sprite = abuelaDerecha; srAbuela.flipX = false; }
-            }
-            else
-            {
-                if (abuelaDerecha != null) { srAbuela.sprite = abuelaDerecha; srAbuela.flipX = true; }
-            }
+            if (abuelaDerecha != null) { srAbuela.sprite = abuelaDerecha; srAbuela.flipX = movimiento.x < 0; }
         }
         else
         {
-            // Movimiento vertical
-            if (movimiento.y > 0)
-            {
-                if (abuelaEspalda != null) srAbuela.sprite = abuelaEspalda;
-            }
-            else
-            {
-                if (abuelaFrente != null) srAbuela.sprite = abuelaFrente;
-            }
+            if (movimiento.y > 0) { if (abuelaEspalda  != null) srAbuela.sprite = abuelaEspalda; }
+            else                  { if (abuelaFrente   != null) srAbuela.sprite = abuelaFrente;  }
         }
     }
 
-    // ── DISPARO HACIA EL MOUSE ────────────────────────────────
     void Disparar()
     {
-        if (lanzasRestantes <= 0)
-        {
-            GameManager.Instance?.SinLanzas();
-            return;
-        }
+        if (lanzasRestantes <= 0) { GameManager.Instance?.SinLanzas(); return; }
 
-        puedeDisparar    = false;
-        atacando         = true;
+        puedeDisparar   = false;
+        atacando        = true;
         lanzasRestantes--;
+        AudioManager.Instance?.SonarLanza();
         GameManager.Instance?.ActualizarLanzas(lanzasRestantes);
 
-        // Sprite de ataque segun la direccion del mouse
         bool horizontal = Mathf.Abs(dirMouse.x) >= Mathf.Abs(dirMouse.y);
-        Sprite atk = horizontal ? spriteAtaqueH : spriteAtaqueV;
+        Sprite atk = horizontal ? Sprite(p1AtaqueH, p2AtaqueH) : Sprite(p1AtaqueV, p2AtaqueV);
         if (atk != null) sr.sprite = atk;
-
         if (dirMouse.x < 0) sr.flipX = true;
         else if (dirMouse.x > 0) sr.flipX = false;
 
-        // Crear la lanza apuntando hacia el mouse
         if (prefabLanza != null)
         {
             Vector3 pos = transform.position + (Vector3)(dirMouse * 0.5f);
@@ -227,13 +194,8 @@ public class PlayerController : MonoBehaviour
         Invoke(nameof(ResetAtaque), cooldown);
     }
 
-    void ResetAtaque()
-    {
-        atacando      = false;
-        puedeDisparar = true;
-    }
+    void ResetAtaque() { atacando = false; puedeDisparar = true; }
 
-    // ── COLISION CON SALAMANQUEJA ─────────────────────────────
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Enemigo"))
@@ -242,6 +204,7 @@ public class PlayerController : MonoBehaviour
             if (sal != null && sal.EstaViva)
             {
                 GameManager.Instance?.PerderVida();
+                AudioManager.Instance?.SonarPerderVida();
                 sal.HuirAlTocarJugador();
             }
         }

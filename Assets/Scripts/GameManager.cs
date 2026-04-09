@@ -6,9 +6,9 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
 
     [Header("Configuracion del nivel")]
-    [SerializeField] private int    enemigosParaGanar  = 15;
-    [SerializeField] private string escenaSiguiente    = "Level_Patio";
-    [SerializeField] private string escenaGameOver     = "GameOver";
+    [SerializeField] private int    enemigosParaGanar = 15;
+    [SerializeField] private string escenaSiguiente   = "Level_Patio";
+    [SerializeField] private string escenaGameOver    = "GameOver";
 
     [Header("Estado")]
     [SerializeField] private int  puntuacion  = 0;
@@ -24,16 +24,16 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int   puntosOleada3 = 250;
 
     [Header("Referencias")]
-    [SerializeField] private UIManager      uiManager;
-    [SerializeField] private Spawner        spawner;
+    [SerializeField] private UIManager uiManager;
+    [SerializeField] private Spawner   spawner;
 
     [Header("Fondo de la sala")]
-    [SerializeField] private SpriteRenderer fondoSala;          // El SpriteRenderer del fondo
-    [SerializeField] private Sprite         spriteSalaCerrada;  // FondoSala.png
-    [SerializeField] private Sprite         spriteSalaAbierta;  // FondoSalaPuertaAbierta.png
+    [SerializeField] private SpriteRenderer fondoSala;
+    [SerializeField] private Sprite         spriteSalaCerrada;
+    [SerializeField] private Sprite         spriteSalaAbierta;
 
-    [Header("Zona de la puerta (trigger invisible)")]
-    [SerializeField] private GameObject zonaPuerta; // Collider2D trigger cerca de la puerta
+    [Header("Zona de la puerta")]
+    [SerializeField] private GameObject zonaPuerta;
 
     // Estado interno
     private int  enemigosEliminados = 0;
@@ -57,23 +57,21 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        // Cargar puntuacion y vidas acumuladas del nivel anterior
+        puntuacion = PlayerPrefs.GetInt("PuntuacionAcumulada", 0);
+        vidas      = PlayerPrefs.GetInt("VidasActuales", 3);
+
         enemigosEliminados = 0;
         puertaAbierta      = false;
 
-        // Fondo empieza con puerta cerrada
         if (fondoSala != null && spriteSalaCerrada != null)
             fondoSala.sprite = spriteSalaCerrada;
 
-        // Zona de puerta desactivada al inicio
         if (zonaPuerta != null) zonaPuerta.SetActive(false);
 
-        // Forzar cambio de musica al entrar al nivel
-        if (AudioManager.Instance != null)
-        {
-            AudioManager.Instance.DetenerMusica();
-            AudioManager.Instance.ReproducirMusicaSala();
-        }
-
+        spawner?.ActualizarTiempoSpawn(spawnOleada1);
+        AudioManager.Instance?.DetenerMusica();
+        AudioManager.Instance?.ReproducirMusicaSala();
         RefrescarUI();
     }
 
@@ -102,6 +100,13 @@ public class GameManager : MonoBehaviour
         uiManager?.ActualizarLanzas(restantes);
     }
 
+    public void TiempoAgotado()
+    {
+        if (!juegoActivo) return;
+        uiManager?.MostrarMensaje("¡Se acabó el tiempo! ¡Coño!");
+        Invoke(nameof(IniciarGameOver), 2f);
+    }
+
     public void SinLanzas()
     {
         if (!juegoActivo) return;
@@ -120,12 +125,19 @@ public class GameManager : MonoBehaviour
         if (vidas <= 0) IniciarGameOver();
     }
 
-    // ── PASAR DE NIVEL (llamado por TransicionNivel) ──────────
+    // ── PASAR DE NIVEL ────────────────────────────────────────
     public void PasarDeNivel()
     {
         if (!puertaAbierta) return;
         juegoActivo = false;
-        Guardar();
+
+        // Guardar puntuacion y vidas para el siguiente nivel
+        PlayerPrefs.SetInt("PuntuacionAcumulada", puntuacion);
+        PlayerPrefs.SetInt("VidasActuales", vidas);
+        PlayerPrefs.SetInt("PuntuacionFinal", puntuacion);
+        PlayerPrefs.SetInt("OleadaFinal", oleada);
+        PlayerPrefs.Save();
+
         SceneManager.LoadScene(escenaSiguiente);
     }
 
@@ -138,11 +150,9 @@ public class GameManager : MonoBehaviour
     {
         puertaAbierta = true;
 
-        // Cambiar el sprite del fondo a la version con puerta abierta
         if (fondoSala != null && spriteSalaAbierta != null)
             fondoSala.sprite = spriteSalaAbierta;
 
-        // Activar la zona trigger de la puerta
         if (zonaPuerta != null) zonaPuerta.SetActive(true);
 
         AudioManager.Instance?.SonarPuertaAbre();
@@ -173,16 +183,16 @@ public class GameManager : MonoBehaviour
         juegoActivo = false;
         AudioManager.Instance?.SonarGameOver();
         AudioManager.Instance?.DetenerMusica();
-        Guardar();
+
+        // Guardar final y limpiar acumulado para proxima partida
+        PlayerPrefs.SetInt("PuntuacionFinal", puntuacion);
+        PlayerPrefs.SetInt("OleadaFinal", oleada);
+        PlayerPrefs.DeleteKey("PuntuacionAcumulada");
+        PlayerPrefs.DeleteKey("VidasActuales");
+        PlayerPrefs.Save();
+
         Invoke(nameof(CargarGameOver), 1.5f);
     }
 
     void CargarGameOver() => SceneManager.LoadScene(escenaGameOver);
-
-    void Guardar()
-    {
-        PlayerPrefs.SetInt("PuntuacionFinal", puntuacion);
-        PlayerPrefs.SetInt("OleadaFinal", oleada);
-        PlayerPrefs.Save();
-    }
 }

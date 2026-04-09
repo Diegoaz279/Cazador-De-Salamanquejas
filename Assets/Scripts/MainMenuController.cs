@@ -30,24 +30,32 @@ public class MainMenuController : MonoBehaviour
     // ─────────────────────────────────────────────────────────
     void Start()
     {
-        MostrarPanel(panelMenuPrincipal);
+
+
+        // Mostrar menu principal aunque panelPersonajes sea null
+        if (panelMenuPrincipal != null) panelMenuPrincipal.SetActive(true);
+        if (panelOpciones != null) panelOpciones.SetActive(false);
+        if (panelPersonajes != null) panelPersonajes.SetActive(false);
+
         AudioManager.Instance?.ReproducirMusicaMenu();
         SincronizarOpciones();
-        ActualizarPersonaje();
     }
 
     // ── NAVEGACION ENTRE PANELES ──────────────────────────────
     void MostrarPanel(GameObject panel)
     {
-        panelMenuPrincipal?.SetActive(panel == panelMenuPrincipal);
-        panelOpciones?.SetActive(panel == panelOpciones);
-        panelPersonajes?.SetActive(panel == panelPersonajes);
+        if (panelMenuPrincipal != null) panelMenuPrincipal.SetActive(panel == panelMenuPrincipal);
+        if (panelOpciones != null) panelOpciones.SetActive(panel == panelOpciones);
+        if (panelPersonajes != null) panelPersonajes.SetActive(panel == panelPersonajes);
     }
 
     // ── BOTONES MENU PRINCIPAL ────────────────────────────────
     public void Jugar()
     {
         AudioManager.Instance?.SonarBoton();
+        // Limpiar puntuacion acumulada para empezar desde 0
+        PlayerPrefs.DeleteKey("PuntuacionAcumulada");
+        PlayerPrefs.DeleteKey("VidasActuales");
         PlayerPrefs.SetInt("PersonajeSeleccionado", personajeSeleccionado);
         PlayerPrefs.Save();
         SceneManager.LoadScene(escenaJuego);

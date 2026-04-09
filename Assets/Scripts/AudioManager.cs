@@ -6,20 +6,19 @@ public class AudioManager : MonoBehaviour
 
     [Header("Musica de fondo")]
     [SerializeField] private AudioSource musicaSource;
-    [SerializeField] private AudioClip   musicaMenu;        // MúsicadelMenúPrincipal
-    [SerializeField] private AudioClip   musicaSala;        // MúsicadelaSala(gameplay)
-    [SerializeField] private AudioClip[] musicasExtra;      // Canciones extra para opciones
+    [SerializeField] private AudioClip   musicaMenu;
+    [SerializeField] private AudioClip   musicaSala;
+    [SerializeField] private AudioClip[] musicasExtra;
 
     [Header("Efectos de sonido")]
     [SerializeField] private AudioSource efectosSource;
-    [SerializeField] private AudioClip   sonidoLanza;       // Sonidodelanzaaldisparar
-    [SerializeField] private AudioClip   sonidoMuerte;      // Sonidodesalamanquejaalmorir
-    [SerializeField] private AudioClip   sonidoVida;        // Sonidodeperderunavida
-    [SerializeField] private AudioClip   sonidoGameOver;    // SonidodeGameOver
-    [SerializeField] private AudioClip   sonidoBoton;       // SonidodebotóndelMenú
-    // Estos son opcionales - si no los tienes dejalos en None
-    [SerializeField] private AudioClip   sonidoPuerta;      // Opcional
-    [SerializeField] private AudioClip   sonidoAparece;     // Opcional
+    [SerializeField] private AudioClip   sonidoLanza;
+    [SerializeField] private AudioClip   sonidoMuerte;
+    [SerializeField] private AudioClip   sonidoVida;
+    [SerializeField] private AudioClip   sonidoGameOver;
+    [SerializeField] private AudioClip   sonidoBoton;
+    [SerializeField] private AudioClip   sonidoPuerta;
+    [SerializeField] private AudioClip   sonidoAparece;
 
     private bool  silenciado    = false;
     private float volMusica     = 0.6f;
@@ -28,25 +27,31 @@ public class AudioManager : MonoBehaviour
 
     void Awake()
     {
-        if (Instance == null)
+        // Si ya existe una instancia, destruir este objeto completo
+        if (Instance != null && Instance != this)
         {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
+            Destroy(gameObject);
+            return;
         }
-        else { Destroy(gameObject); return; }
 
-        silenciado    = PlayerPrefs.GetInt("Silenciado", 0) == 1;
-        volMusica     = PlayerPrefs.GetFloat("VolMusica", 0.4f);
-        volEfectos    = PlayerPrefs.GetFloat("VolEfectos", 2.0f);
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+
+        silenciado = PlayerPrefs.GetInt("Silenciado", 0) == 1;
+        volMusica = PlayerPrefs.GetFloat("VolMusica", 0.6f);
+        volEfectos = PlayerPrefs.GetFloat("VolEfectos", 1.0f);
         cancionActual = PlayerPrefs.GetInt("CancionActual", 0);
 
-        if (musicaSource  != null) musicaSource.volume  = silenciado ? 0f : volMusica;
+        if (musicaSource != null) musicaSource.volume = silenciado ? 0f : volMusica;
         if (efectosSource != null) efectosSource.volume = volEfectos;
     }
 
     // ── MUSICA ────────────────────────────────────────────────
     public void ReproducirMusicaMenu()
     {
+        if (musicaSource == null) return;
+        // Si ya esta sonando la musica del menu, no hacer nada
+        if (musicaSource.isPlaying && musicaSource.clip == ObtenerCancionMenu()) return;
         Reproducir(ObtenerCancionMenu());
     }
 
@@ -60,10 +65,14 @@ public class AudioManager : MonoBehaviour
         musicaSource?.Stop();
     }
 
+    // Siempre detiene lo que suena y pone el nuevo clip
     void Reproducir(AudioClip clip)
     {
         if (musicaSource == null || clip == null) return;
+        // Ya esta sonando este clip — no reiniciar
         if (musicaSource.clip == clip && musicaSource.isPlaying) return;
+        // Cambiar clip
+        musicaSource.Stop();
         musicaSource.clip = clip;
         musicaSource.loop = true;
         if (!silenciado) musicaSource.Play();
@@ -118,13 +127,9 @@ public class AudioManager : MonoBehaviour
         cancionActual = (cancionActual + 1) % total;
         PlayerPrefs.SetInt("CancionActual", cancionActual);
         PlayerPrefs.Save();
+        // Forzar cambio
+        musicaSource?.Stop();
         Reproducir(ObtenerCancionMenu());
-    }
-
-    public string ObtenerNombreCancion()
-    {
-        AudioClip c = ObtenerCancionMenu();
-        return c != null ? c.name : "Sin música";
     }
 
     AudioClip ObtenerCancionMenu()
@@ -135,8 +140,13 @@ public class AudioManager : MonoBehaviour
         return idx < musicasExtra.Length ? musicasExtra[idx] : musicaMenu;
     }
 
+    public string ObtenerNombreCancionActual()
+    {
+        AudioClip c = ObtenerCancionMenu();
+        return c != null ? c.name : "Sin música";
+    }
+
     public bool  EstaSilenciado() => silenciado;
     public float VolumenMusica    => volMusica;
     public float VolumenEfectos   => volEfectos;
-    public string ObtenerNombreCancionActual() => ObtenerNombreCancion();
 }

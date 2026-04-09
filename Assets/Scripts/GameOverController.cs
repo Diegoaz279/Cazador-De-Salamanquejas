@@ -15,15 +15,15 @@ public class GameOverController : MonoBehaviour
 
     void Start()
     {
-        int puntos  = PlayerPrefs.GetInt("PuntuacionFinal", 0);
-        int oleada  = PlayerPrefs.GetInt("OleadaFinal", 1);
-        int record  = PlayerPrefs.GetInt("Record", 0);
+        int puntos  = PlayerPrefs.GetInt("", 0);
+        int oleada  = PlayerPrefs.GetInt("", 1);
+        int record  = PlayerPrefs.GetInt("", 0);
         bool nuevo  = puntos > record;
 
-        if (nuevo) { PlayerPrefs.SetInt("Record", puntos); PlayerPrefs.Save(); record = puntos; }
+        if (nuevo) { PlayerPrefs.SetInt("", puntos); PlayerPrefs.Save(); record = puntos; }
 
-        if (textoPuntuacion != null) textoPuntuacion.text = $"Puntuacion: RD$ {puntos}";
-        if (textoOleada     != null) textoOleada.text     = $"Oleada alcanzada: {oleada}";
+        if (textoPuntuacion != null) textoPuntuacion.text = $"{puntos}";
+        if (textoOleada     != null) textoOleada.text     = $"{oleada}";
         if (textoRecord     != null)
         {
             textoRecord.text  = nuevo ? "¡NUEVO RECORD! ¡Qué bruto!" : $"Record: RD$ {record}";
