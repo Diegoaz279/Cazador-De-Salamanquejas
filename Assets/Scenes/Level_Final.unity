@@ -933,10 +933,10 @@ MonoBehaviour:
   limiteAbajo: -2.8
   limiteArriba: 1
   prefabLanza: {fileID: 2531847391286173314, guid: 6d576d024f8b0a0408d90b9a23dbb0c5, type: 3}
-  velocidadLanza: 18
+  velocidadLanza: 16
   distanciaMaxima: 8
   cooldown: 0.1
-  lanzasIniciales: 110
+  lanzasIniciales: 100
   p1Idle: {fileID: 21300000, guid: 76ad3743fcbc84749ae73d9183f44652, type: 3}
   p1Walk1: {fileID: 21300000, guid: 76ad3743fcbc84749ae73d9183f44652, type: 3}
   p1Walk2: {fileID: 21300000, guid: a84f0435d2d6dec46b10683a82ba28ee, type: 3}

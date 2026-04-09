@@ -1,145 +1,132 @@
-# 🦎 INVASIÓN DE SALAMANQUEJAS
-## En casa de la abuela
+# Invasión de Salamanquejas 🇩🇴
+### En casa de la abuela
 
-![Unity](https://img.shields.io/badge/Unity-2022.3.62f2-black?logo=unity)
-![C#](https://img.shields.io/badge/C%23-Scripts-blue?logo=csharp)
-![Materia](https://img.shields.io/badge/ISW--414-Programación%20de%20Videojuegos-red)
-
-Videojuego 2D de acción con temática dominicana desarrollado en **Unity 2022** para la materia **Programación de Videojuegos (ISW-414)** de la Universidad Central del Este.
+Videojuego 2D de acción desarrollado en Unity 2022 para la materia **Programación de Videojuegos (ISW-414)** de la Universidad Central del Este.
 
 ---
 
-## 👤 Autor
+## Autor
 
-| Campo | Dato |
-|---|---|
-| **Nombre** | Diego Alberto Castillo Zorrilla |
-| **Matrícula** | 2023-0733 |
-| **Universidad** | Universidad Central del Este (UCE) |
-| **Profesor** | Ivan Zorrilla |
-| **Materia** | ISW-414 Programación de Videojuegos |
+**Diego Alberto Castillo Zorrilla**  
+Matrícula: 2023-0733  
+UCE — Recinto Punta Cana  
+Profesor: Ivan Zorrilla
 
 ---
 
-## 🎮 Descripción
+## De qué va el juego
 
-En una típica tarde dominicana, la abuela está descansando en su sala cuando una invasión masiva de salamanquejas toma la casa. Diego, armado con sus lanzas, debe eliminarlas antes de que escapen o toquen a su abuela.
-
-El juego está ambientado en una casa dominicana auténtica con:
-- Bandera dominicana en la pared
-- Televisor viejo, abanico de techo y cuadros religiosos
-- Moto Suzuki en el patio
-- Música estilo merengue/caribeño
+La abuela está sentada tranquila en su sala cuando una invasión de salamanquejas toma la casa. Diego, armado con lanzas, tiene que eliminarlas antes de que lleguen a ella. El juego tiene 3 niveles: la sala, el patio y una guarida final donde espera la Salamanqueja Madre junto a sus crías.
 
 ---
 
-## 🕹️ Controles
+## Controles
 
 | Acción | Control |
 |---|---|
-| Mover al jugador | `W A S D` o Flechas del teclado |
-| Disparar lanza | `Clic izquierdo` (apunta hacia el cursor) |
-| Pausar el juego | `ESC` |
+| Mover | WASD o flechas |
+| Disparar lanza | Clic izquierdo (apunta al cursor) |
+| Pausar | ESC |
 
 ---
 
-## 🦎 Tipos de Salamanquejas
+## Niveles
 
-| Tipo | Color | Puntos | Especial |
+| # | Escenario | Meta | Lanzas |
 |---|---|---|---|
-| Normal | Amarilla | 10 RD$ | — |
-| Rápida | Azul | 25 RD$ | Desaparece rápido |
-| Resistente | Naranja | 15 RD$ | Requiere 2 golpes |
-| Dorada | Dorada | 50 RD$ | Muy escasa |
+| 1 | Sala de la abuela | 15 salamanquejas | 20 |
+| 2 | Patio de la casa | 25 salamanquejas | 50 |
+| 3 | Guarida Final | 6 crías + Boss | 100 |
 
 ---
 
-## 🏠 Niveles
+## Tipos de enemigos
 
-| Nivel | Escenario | Objetivo | Lanzas | Dificultad |
-|---|---|---|---|---|
-| 1 | Sala de la abuela | 15 salamanquejas | 20 | Normal |
-| 2 | Patio de la casa | 20 salamanquejas | 30 | Difícil |
-
----
-
-## ⚙️ Características
-
-- ✅ Menú principal con 4 opciones (Jugar, Opciones, Personajes, Salir)
-- ✅ Selección de personaje (Diego / Railyn)
-- ✅ Panel de opciones con control de volumen y silencio
-- ✅ Sistema de vidas (3 vidas por partida)
-- ✅ Sistema de puntuación en RD$ acumulado entre niveles
-- ✅ 3 Oleadas de dificultad progresiva por nivel
-- ✅ Salamanquejas salen de los hoyos del piso
-- ✅ La abuela sigue al jugador por el escenario
-- ✅ Puerta se desbloquea al completar el objetivo
-- ✅ Transición con fade a negro entre niveles
-- ✅ Panel de pausa con controles de audio
-- ✅ Pantalla de Game Over con record guardado
-- ✅ Música y efectos de sonido dominicanos
-- ✅ 2 escenarios: Sala y Patio
+| Tipo | Puntos | Característica |
+|---|---|---|
+| Normal | 10 RD$ | Estándar |
+| Rápida | 25 RD$ | Poco tiempo visible |
+| Resistente | 15 RD$ | Aguanta 2 golpes |
+| Dorada | 50 RD$ | Muy escasa |
+| Hija del Boss | 50 RD$ | 8 golpes para morir |
+| Salamanqueja Madre | — | Barra de vida, 50 golpes |
 
 ---
 
-## 🗂️ Estructura del Repositorio
+## Capturas
+
+![Menú Principal](Screenshots/menu.png)
+*Menú principal*
+
+![Nivel 1 — Sala](Screenshots/sala.png)
+*Nivel 1 — Sala de la abuela*
+
+![Nivel 2 — Patio](Screenshots/patio.png)
+*Nivel 2 — Patio de la casa*
+
+![Nivel 3 — Guarida Final](Screenshots/final.png)
+*Nivel 3 — Guarida Final con las crías del Boss*
+
+---
+
+## Características
+
+- Menú principal con selección de personaje (Diego o Railyn)
+- Panel de opciones con control de volumen y silencio
+- 3 vidas que se mantienen entre niveles
+- Puntuación acumulada en RD$ entre los 3 niveles
+- 3 oleadas de dificultad progresiva por nivel
+- La abuela sigue al jugador en todo momento
+- Puerta se desbloquea al completar el objetivo
+- Transición con fade negro entre niveles
+- Panel de pausa con controles de audio
+- Barra de vida del Boss Final
+- Panel de victoria al derrotar al Boss
+- Pantalla de Game Over con récord guardado
+- Música y efectos de sonido
+
+---
+
+## Estructura del repositorio
 
 ```
 CazadorDeSalamanquejas/
 ├── Assets/
-│   ├── Audio/          # Música y efectos de sonido
-│   ├── Prefabs/        # Salamanqueja y Lanza
-│   ├── Scenes/         # MainMenu, Level_Sala, Level_Patio, GameOver
-│   ├── Scripts/        # 12 scripts C#
-│   └── Sprites/        # Personajes, lagartos, fondos, UI
+│   ├── Audio/
+│   ├── Prefabs/
+│   ├── Scenes/          — MainMenu, Level_Sala, Level_Patio, Level_Final, GameOver
+│   ├── Scripts/         — 15 scripts C#
+│   └── Sprites/
 ├── Documentacion/
 │   └── CazadorSalamanquejas_Castillo_2023-0733.pdf
-├── .gitignore
+├── Screenshots/
 └── README.md
 ```
 
 ---
 
-## 📜 Scripts principales
+## Scripts
 
-| Script | Descripción |
+| Script | Función |
 |---|---|
-| `GameManager.cs` | Controla estado del juego, puntuación, vidas y oleadas |
-| `PlayerController.cs` | Movimiento, animaciones y disparo del jugador |
-| `Salamanqueja.cs` | Comportamiento y tipos de enemigos |
-| `Spawner.cs` | Object Pool y spawn de salamanquejas |
-| `UIManager.cs` | HUD, mensajes, pausa y flash de daño |
-| `AudioManager.cs` | Música y efectos de sonido persistentes entre escenas |
-| `LanzaProyectil.cs` | Movimiento y detección de impacto del proyectil |
-| `TransicionNivel.cs` | Fade a negro entre niveles |
-| `MainMenuController.cs` | Navegación del menú y selección de personaje |
-| `GameOverController.cs` | Pantalla de Game Over y récord |
+| GameManager | Estado del juego, vidas, puntos y oleadas |
+| PlayerController | Movimiento, animaciones y disparo |
+| Salamanqueja | Comportamiento de los enemigos normales |
+| Spawner | Spawn de salamanquejas por oleada |
+| SpawnerBoss | Lógica del nivel final con fases |
+| FinalBoss | Comportamiento y barra de vida del boss |
+| SalamanquejaHija | Enemigos del nivel final con mucha vida |
+| UIManager | HUD, mensajes y panel de pausa |
+| AudioManager | Música y efectos persistentes entre escenas |
+| MainMenuController | Menú, opciones y selección de personaje |
+| GameOverController | Pantalla final con récord |
+| TransicionNivel | Fade a negro entre niveles |
 
 ---
 
-## 🎥 Video Demo
+## Documentación
 
-*(Próximamente — agregar link de YouTube aquí)*
-
----
-
-## 📄 Documentación
-
-La documentación técnica completa se encuentra en:
 `Documentacion/CazadorSalamanquejas_Castillo_2023-0733.pdf`
-
-Incluye: descripción, mecánicas, diseño técnico, scripts, assets, screenshots y conclusiones.
-
----
-
-## 🛠️ Tecnologías
-
-- **Motor:** Unity 2022.3.62f2
-- **Lenguaje:** C#
-- **UI:** TextMesh Pro
-- **Arte:** Generado con IA (sprites propios)
-- **Audio:** Generado con IA (Gemini)
-- **Control de versiones:** Git / GitHub
 
 ---
 
