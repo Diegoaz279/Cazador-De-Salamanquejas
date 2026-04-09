@@ -558,7 +558,7 @@ MonoBehaviour:
   velocidadLanza: 12
   distanciaMaxima: 8
   cooldown: 0.3
-  lanzasIniciales: 35
+  lanzasIniciales: 40
   p1Idle: {fileID: 21300000, guid: 76ad3743fcbc84749ae73d9183f44652, type: 3}
   p1Walk1: {fileID: 21300000, guid: 76ad3743fcbc84749ae73d9183f44652, type: 3}
   p1Walk2: {fileID: 21300000, guid: a84f0435d2d6dec46b10683a82ba28ee, type: 3}
@@ -2097,6 +2097,96 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 789233676}
   m_CullTransparentMesh: 1
+--- !u!1 &794356624
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 794356627}
+  - component: {fileID: 794356626}
+  - component: {fileID: 794356625}
+  m_Layer: 0
+  m_Name: ZonaPuerta
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &794356625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 794356624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e80e6a84e9f304d4c9301cc10dbdc532, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!61 &794356626
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 794356624}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
+--- !u!4 &794356627
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 794356624}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 3.94, y: 0.88, z: 0}
+  m_LocalScale: {x: 3.83, y: 4.2, z: 1.053}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &799414993
 GameObject:
   m_ObjectHideFlags: 0
@@ -2574,7 +2664,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.00012207031}
+  m_AnchoredPosition: {x: 0, y: -0.00024414062}
   m_SizeDelta: {x: -627.688, y: -409.958}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1137759819
@@ -3564,7 +3654,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemigosParaGanar: 25
-  escenaSiguiente: GameOver
+  escenaSiguiente: Level_Final
   escenaGameOver: GameOver
   puntuacion: 0
   vidas: 3
@@ -3580,7 +3670,7 @@ MonoBehaviour:
   fondoSala: {fileID: 1969305220}
   spriteSalaCerrada: {fileID: 21300000, guid: 33cdd949f8d9b9d45a3ff35f18afb259, type: 3}
   spriteSalaAbierta: {fileID: 21300000, guid: 52e8e40b5be24af45b7f068849fe1c96, type: 3}
-  zonaPuerta: {fileID: 0}
+  zonaPuerta: {fileID: 794356624}
   mensajeSinLanzas: Se te acabaron las lanzas!
   mensajeTiempoFuera: Se acabo el tiempo!
   mensajePuertaAbre: Puerta abierta! Corre!
@@ -4837,5 +4927,6 @@ SceneRoots:
   - {fileID: 308282170}
   - {fileID: 1969305221}
   - {fileID: 1775716531}
+  - {fileID: 794356627}
   - {fileID: 1191502585}
   - {fileID: 1346330543}
