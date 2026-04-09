@@ -35,6 +35,13 @@ public class GameManager : MonoBehaviour
     [Header("Zona de la puerta")]
     [SerializeField] private GameObject zonaPuerta;
 
+    [Header("Mensajes (editables desde el Inspector)")]
+    [SerializeField] private string mensajeSinLanzas   = "Se te acabaron las lanzas!";
+    [SerializeField] private string mensajeTiempoFuera = "Se acabo el tiempo!";
+    [SerializeField] private string mensajePuertaAbre  = "Puerta abierta! Corre!";
+    [SerializeField] private string mensajeOleada2     = "OLEADA 2! Se pusieron brutas...";
+    [SerializeField] private string mensajeOleada3     = "OLEADA 3! Esto se puso feo!";
+
     // Estado interno
     private int  enemigosEliminados = 0;
     private bool puertaAbierta      = false;
@@ -57,7 +64,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        // Cargar puntuacion y vidas acumuladas del nivel anterior
+        // Cargar puntuacion y vidas del nivel anterior
         puntuacion = PlayerPrefs.GetInt("PuntuacionAcumulada", 0);
         vidas      = PlayerPrefs.GetInt("VidasActuales", 3);
 
@@ -66,13 +73,19 @@ public class GameManager : MonoBehaviour
 
         if (fondoSala != null && spriteSalaCerrada != null)
             fondoSala.sprite = spriteSalaCerrada;
-
         if (zonaPuerta != null) zonaPuerta.SetActive(false);
 
         spawner?.ActualizarTiempoSpawn(spawnOleada1);
+        RefrescarUI();
+
+        // Delay para que AudioManager este listo
+        Invoke(nameof(IniciarMusica), 0.2f);
+    }
+
+    void IniciarMusica()
+    {
         AudioManager.Instance?.DetenerMusica();
         AudioManager.Instance?.ReproducirMusicaSala();
-        RefrescarUI();
     }
 
     // ── PUNTOS Y CONTEO ───────────────────────────────────────
@@ -103,14 +116,14 @@ public class GameManager : MonoBehaviour
     public void TiempoAgotado()
     {
         if (!juegoActivo) return;
-        uiManager?.MostrarMensaje("¡Se acabó el tiempo! ¡Coño!");
+        uiManager?.MostrarMensaje(mensajeTiempoFuera);
         Invoke(nameof(IniciarGameOver), 2f);
     }
 
     public void SinLanzas()
     {
         if (!juegoActivo) return;
-        uiManager?.MostrarMensaje("¡Se te acabaron las lanzas! ¡Coño!");
+        uiManager?.MostrarMensaje(mensajeSinLanzas);
         Invoke(nameof(IniciarGameOver), 2f);
     }
 
@@ -131,7 +144,6 @@ public class GameManager : MonoBehaviour
         if (!puertaAbierta) return;
         juegoActivo = false;
 
-        // Guardar puntuacion y vidas para el siguiente nivel
         PlayerPrefs.SetInt("PuntuacionAcumulada", puntuacion);
         PlayerPrefs.SetInt("VidasActuales", vidas);
         PlayerPrefs.SetInt("PuntuacionFinal", puntuacion);
@@ -152,11 +164,10 @@ public class GameManager : MonoBehaviour
 
         if (fondoSala != null && spriteSalaAbierta != null)
             fondoSala.sprite = spriteSalaAbierta;
-
         if (zonaPuerta != null) zonaPuerta.SetActive(true);
 
         AudioManager.Instance?.SonarPuertaAbre();
-        uiManager?.MostrarMensaje("¡Puerta abierta! ¡Corre al patio!");
+        uiManager?.MostrarMensaje(mensajePuertaAbre);
     }
 
     void VerificarOleada()
@@ -169,7 +180,8 @@ public class GameManager : MonoBehaviour
         {
             float t = oleada == 3 ? spawnOleada3 : spawnOleada2;
             spawner?.ActualizarTiempoSpawn(t);
-            uiManager?.MostrarMensaje($"¡OLEADA {oleada}! Se pusieron brutas...");
+            string msg = oleada == 3 ? mensajeOleada3 : mensajeOleada2;
+            uiManager?.MostrarMensaje(msg);
         }
     }
 
@@ -184,7 +196,6 @@ public class GameManager : MonoBehaviour
         AudioManager.Instance?.SonarGameOver();
         AudioManager.Instance?.DetenerMusica();
 
-        // Guardar final y limpiar acumulado para proxima partida
         PlayerPrefs.SetInt("PuntuacionFinal", puntuacion);
         PlayerPrefs.SetInt("OleadaFinal", oleada);
         PlayerPrefs.DeleteKey("PuntuacionAcumulada");

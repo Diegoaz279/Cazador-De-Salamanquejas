@@ -4,10 +4,10 @@ using TMPro;
 
 public class GameOverController : MonoBehaviour
 {
-    [Header("Textos")]
-    [SerializeField] private TextMeshProUGUI textoPuntuacion;
-    [SerializeField] private TextMeshProUGUI textoOleada;
-    [SerializeField] private TextMeshProUGUI textoRecord;
+    [Header("Textos de valores (solo el numero/valor cambia)")]
+    [SerializeField] private TextMeshProUGUI textoPuntuacion; // Campo vacio bajo PUNTUACION FINAL
+    [SerializeField] private TextMeshProUGUI textoOleada;     // Campo vacio bajo OLEADA ALCANZADA
+    [SerializeField] private TextMeshProUGUI textoRecord;     // Texto NUEVO RECORD (se activa/oculta)
 
     [Header("Escenas")]
     [SerializeField] private string escenaJuego = "Level_Sala";
@@ -15,23 +15,55 @@ public class GameOverController : MonoBehaviour
 
     void Start()
     {
-        int puntos  = PlayerPrefs.GetInt("", 0);
-        int oleada  = PlayerPrefs.GetInt("", 1);
-        int record  = PlayerPrefs.GetInt("", 0);
-        bool nuevo  = puntos > record;
+        int puntos = PlayerPrefs.GetInt("PuntuacionFinal", 0);
+        int oleada = PlayerPrefs.GetInt("OleadaFinal", 1);
+        int record = PlayerPrefs.GetInt("Record", 0);
+        bool esNuevoRecord = puntos > record;
 
-        if (nuevo) { PlayerPrefs.SetInt("", puntos); PlayerPrefs.Save(); record = puntos; }
-
-        if (textoPuntuacion != null) textoPuntuacion.text = $"{puntos}";
-        if (textoOleada     != null) textoOleada.text     = $"{oleada}";
-        if (textoRecord     != null)
+        // Guardar nuevo record si aplica
+        if (esNuevoRecord)
         {
-            textoRecord.text  = nuevo ? "¡NUEVO RECORD! ¡Qué bruto!" : $"Record: RD$ {record}";
-            textoRecord.color = nuevo ? Color.yellow : Color.white;
+            PlayerPrefs.SetInt("Record", puntos);
+            PlayerPrefs.Save();
         }
+
+        // Solo actualizar el valor numerico, no el titulo
+        if (textoPuntuacion != null)
+            textoPuntuacion.text = $"RD$ {puntos}";
+
+        if (textoOleada != null)
+            textoOleada.text = $"{oleada}";
+
+        // Mostrar u ocultar NUEVO RECORD
+        if (textoRecord != null)
+            textoRecord.gameObject.SetActive(esNuevoRecord);
     }
 
-    public void Reiniciar() => SceneManager.LoadScene(escenaJuego);
-    public void IrAlMenu()  => SceneManager.LoadScene(escenaMenu);
-    public void Salir()     => Application.Quit();
+    // ── BOTONES ───────────────────────────────────────────────
+    public void Reiniciar()
+    {
+        AudioManager.Instance?.SonarBoton();
+        PlayerPrefs.DeleteKey("PuntuacionAcumulada");
+        PlayerPrefs.DeleteKey("VidasActuales");
+        SceneManager.LoadScene(escenaJuego);
+    }
+
+    public void IrAlMenu()
+    {
+        AudioManager.Instance?.SonarBoton();
+        SceneManager.LoadScene(escenaMenu);
+    }
+
+    public void Salir()
+    {
+        AudioManager.Instance?.SonarBoton();
+        Application.Quit();
+    }
+
+    public void VerPuntuaciones()
+    {
+        AudioManager.Instance?.SonarBoton();
+        // Por ahora no hace nada, lo conectamos cuando hagas la tabla
+        Debug.Log("Ver puntuaciones - proximamente");
+    }
 }

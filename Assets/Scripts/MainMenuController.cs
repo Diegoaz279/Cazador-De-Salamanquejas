@@ -30,23 +30,18 @@ public class MainMenuController : MonoBehaviour
     // ─────────────────────────────────────────────────────────
     void Start()
     {
-
-
-        // Mostrar menu principal aunque panelPersonajes sea null
-        if (panelMenuPrincipal != null) panelMenuPrincipal.SetActive(true);
-        if (panelOpciones != null) panelOpciones.SetActive(false);
-        if (panelPersonajes != null) panelPersonajes.SetActive(false);
-
+        MostrarPanel(panelMenuPrincipal);
         AudioManager.Instance?.ReproducirMusicaMenu();
         SincronizarOpciones();
+        ActualizarPersonaje();
     }
 
     // ── NAVEGACION ENTRE PANELES ──────────────────────────────
     void MostrarPanel(GameObject panel)
     {
-        if (panelMenuPrincipal != null) panelMenuPrincipal.SetActive(panel == panelMenuPrincipal);
-        if (panelOpciones != null) panelOpciones.SetActive(panel == panelOpciones);
-        if (panelPersonajes != null) panelPersonajes.SetActive(panel == panelPersonajes);
+        panelMenuPrincipal?.SetActive(panel == panelMenuPrincipal);
+        panelOpciones?.SetActive(panel == panelOpciones);
+        panelPersonajes?.SetActive(panel == panelPersonajes);
     }
 
     // ── BOTONES MENU PRINCIPAL ────────────────────────────────
@@ -192,12 +187,28 @@ public class MainMenuController : MonoBehaviour
             textoCancion.text = "♪ " + AudioManager.Instance.ObtenerNombreCancionActual();
     }
 
+    [Header("Tamaño de cada personaje en el panel (width, height)")]
+    [SerializeField] private Vector2[] tamanosPersonaje = {
+        new Vector2(200, 300),  // Personaje 1
+        new Vector2(200, 300)   // Personaje 2
+    };
+
     void ActualizarPersonaje()
     {
         if (spritesPersonaje == null || spritesPersonaje.Length == 0) return;
 
         if (imagenPersonaje != null)
+        {
             imagenPersonaje.sprite = spritesPersonaje[personajeSeleccionado];
+
+            // Aplicar tamaño configurado para este personaje
+            if (tamanosPersonaje != null && personajeSeleccionado < tamanosPersonaje.Length)
+            {
+                RectTransform rt = imagenPersonaje.GetComponent<RectTransform>();
+                if (rt != null)
+                    rt.sizeDelta = tamanosPersonaje[personajeSeleccionado];
+            }
+        }
 
         if (textoNombrePersonaje != null)
         {
