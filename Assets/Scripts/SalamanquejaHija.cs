@@ -1,21 +1,18 @@
 using UnityEngine;
 using System.Collections;
 
-// Pon este script en el prefab de las hijas del boss
-// Es similar a Salamanqueja pero con mucha vida y sin tiempo limite
 public class SalamanquejaHija : MonoBehaviour
 {
     [Header("Sprites")]
-    [SerializeField] private Sprite spriteHija1; // FinalBossHija1
-    [SerializeField] private Sprite spriteHija2; // FinalBossHija2
+    [SerializeField] private Sprite spriteHija1;
+    [SerializeField] private Sprite spriteHija2;
 
     [Header("Vida")]
-    [SerializeField] private int vidaMaxima = 8; // Necesita 8 golpes para morir
+    [SerializeField] private int vidaMaxima = 8;
 
-    [Header("Tiempo visible (larga)")]
+    [Header("Tiempo visible")]
     [SerializeField] private float tiempoVisible = 6f;
 
-    // Estado publico
     public bool EstaViva         { get; private set; } = false;
     public bool PuedeSerGolpeada { get; private set; } = false;
 
@@ -25,7 +22,6 @@ public class SalamanquejaHija : MonoBehaviour
     private bool           procesando = false;
     private Vector3        posHoyo;
     private Vector3        escalaBase;
-    private int            indiceSprite = 0; // Para alternar sprites
 
     void Awake()
     {
@@ -45,18 +41,12 @@ public class SalamanquejaHija : MonoBehaviour
         transform.rotation   = Quaternion.identity;
         if (col != null) col.enabled = false;
 
-        // Alternar entre los dos sprites de hija
-        indiceSprite = Random.Range(0, 2);
-        AsignarSprite();
-
-        StartCoroutine(SalirDelHoyo());
-    }
-
-    void AsignarSprite()
-    {
-        Sprite s = indiceSprite == 0 ? spriteHija1 : spriteHija2;
+        // Alternar sprite
+        Sprite s = Random.value > 0.5f ? spriteHija1 : spriteHija2;
         if (s != null) sr.sprite = s;
         sr.color = Color.white;
+
+        StartCoroutine(SalirDelHoyo());
     }
 
     IEnumerator SalirDelHoyo()
@@ -84,12 +74,11 @@ public class SalamanquejaHija : MonoBehaviour
 
     IEnumerator Temporizador()
     {
-        float tiempo = tiempoVisible;
-        while (tiempo > 0f && EstaViva)
+        float t = tiempoVisible;
+        while (t > 0f && EstaViva)
         {
-            tiempo -= Time.deltaTime;
-            // Parpadeo al final
-            if (tiempo < 1f)
+            t -= Time.deltaTime;
+            if (t < 1f)
             {
                 float a = Mathf.PingPong(Time.time * 8f, 1f);
                 Color c = sr.color; c.a = Mathf.Max(a, 0.2f); sr.color = c;
@@ -99,19 +88,14 @@ public class SalamanquejaHija : MonoBehaviour
         if (EstaViva) HuirAlHoyo();
     }
 
-    // Llamado por LanzaProyectil
     public void Morir()
     {
         if (!PuedeSerGolpeada || procesando) return;
 
         vidaActual--;
-
-        // Flash rojo en cada golpe
         StartCoroutine(FlashGolpe());
+        if (vidaActual > 0) return;
 
-        if (vidaActual > 0) return; // Sigue viva
-
-        // Murio
         procesando       = true;
         EstaViva         = false;
         PuedeSerGolpeada = false;
@@ -120,8 +104,11 @@ public class SalamanquejaHija : MonoBehaviour
         StopAllCoroutines();
         AudioManager.Instance?.SonarMuerteSalamandra();
 
-        // Avisar al GameManagerBoss
-        GameManagerBoss.Instance?.HijaMuerta();
+        // Usar GameManager normal para puntos
+        GameManager.Instance?.SumarPuntos(25);
+
+        // Avisar al SpawnerBoss
+        SpawnerBoss.Instance?.NotificarHijaMuerta();
 
         StartCoroutine(AnimMuerte());
     }

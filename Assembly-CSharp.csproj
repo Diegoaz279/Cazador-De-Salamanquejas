@@ -108,6 +108,7 @@
     <Compile Include="Assets\Scripts\TransicionNivel.cs" />
     <Compile Include="Assets\Scripts\UIManager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextInfoDebugTool.cs" />
+    <Compile Include="Assets\Scripts\SpawnerBoss.cs" />
     <Compile Include="Assets\Scripts\Salamanqueja.cs" />
   </ItemGroup>
   <ItemGroup>

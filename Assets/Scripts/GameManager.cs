@@ -138,6 +138,12 @@ public class GameManager : MonoBehaviour
         if (vidas <= 0) IniciarGameOver();
     }
 
+    // Para que SpawnerBoss pueda mostrar mensajes usando el UIManager normal
+    public void UIManager_MostrarMensaje(string msg)
+    {
+        uiManager?.MostrarMensaje(msg);
+    }
+
     // ── PASAR DE NIVEL ────────────────────────────────────────
     public void PasarDeNivel()
     {

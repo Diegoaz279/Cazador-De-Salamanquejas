@@ -2,27 +2,19 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 
-// Pon este script en el GameObject del FinalBoss
-// El boss esta fijo en el hoyo central
 public class FinalBoss : MonoBehaviour
 {
     [Header("Sprites")]
-    [SerializeField] private Sprite spriteBoss;      // FinalBoss.png
-    [SerializeField] private Sprite spriteBossEnojo; // Si tienes una version enojada
+    [SerializeField] private Sprite spriteBoss;
 
-    [Header("Vida del Boss")]
-    [SerializeField] private int vidaMaxima = 50;    // 50 golpes para morir
+    [Header("Vida")]
+    [SerializeField] private int vidaMaxima = 50;
 
-    [Header("Barra de vida UI")]
-    [SerializeField] private Slider barraVida;        // Slider en el Canvas
-    [SerializeField] private Image  rellenoBarraVida; // La Image del fill de la barra
+    [Header("Colores barra de vida")]
+    [SerializeField] private Color colorLlena  = Color.green;
+    [SerializeField] private Color colorMitad  = Color.yellow;
+    [SerializeField] private Color colorBaja   = Color.red;
 
-    [Header("Colores de la barra segun vida")]
-    [SerializeField] private Color colorVidaLlena  = Color.green;
-    [SerializeField] private Color colorVidaMitad  = Color.yellow;
-    [SerializeField] private Color colorVidaBaja   = Color.red;
-
-    // Estado publico
     public bool EstaVivo         { get; private set; } = false;
     public bool PuedeSerGolpeado { get; private set; } = false;
 
@@ -32,17 +24,23 @@ public class FinalBoss : MonoBehaviour
     private bool           procesando = false;
     private Vector3        posHoyo;
     private Vector3        escalaBase;
+    private Slider         barraVida;
+    private Image          fillBarra;
 
     void Awake()
     {
         sr        = GetComponent<SpriteRenderer>();
         col       = GetComponent<Collider2D>();
         escalaBase = transform.localScale;
-        // El boss empieza oculto
-        gameObject.SetActive(false);
     }
 
-    // Llamado por GameManagerBoss cuando todas las hijas mueren
+    // Llamado por SpawnerBoss para pasar la barra de vida
+    public void ConfigurarBarra(Slider barra, Image fill)
+    {
+        barraVida = barra;
+        fillBarra = fill;
+    }
+
     public void Aparecer()
     {
         gameObject.SetActive(true);
@@ -53,11 +51,10 @@ public class FinalBoss : MonoBehaviour
         vidaActual       = vidaMaxima;
 
         if (spriteBoss != null) sr.sprite = spriteBoss;
-        sr.color = Color.white;
+        sr.color             = Color.white;
         transform.localScale = Vector3.zero;
         if (col != null) col.enabled = false;
 
-        // Configurar barra de vida
         if (barraVida != null)
         {
             barraVida.gameObject.SetActive(true);
@@ -71,11 +68,9 @@ public class FinalBoss : MonoBehaviour
 
     IEnumerator SalirDelHoyo()
     {
-        // Animacion dramatica de salida — mas lenta que las hijas
         Vector3 destino = posHoyo + Vector3.up * 0.3f;
-        float dur = 1.2f, t = 0f;
+        float dur = 1.5f, t = 0f;
 
-        // Temblar la camara (efecto de tension)
         while (t < dur)
         {
             t += Time.deltaTime;
@@ -90,12 +85,8 @@ public class FinalBoss : MonoBehaviour
         EstaVivo             = true;
         PuedeSerGolpeado     = true;
         if (col != null) col.enabled = true;
-
-        // Mensaje dramatico
-        GameManagerBoss.Instance?.MostrarMensajeBoss("¡LA SALAMANQUEJA MADRE HA DESPERTADO!");
     }
 
-    // Llamado por LanzaProyectil
     public void Morir()
     {
         if (!PuedeSerGolpeado || procesando) return;
@@ -103,16 +94,10 @@ public class FinalBoss : MonoBehaviour
         vidaActual--;
         vidaActual = Mathf.Max(0, vidaActual);
 
-        // Actualizar barra
         if (barraVida != null) barraVida.value = vidaActual;
         ActualizarColorBarra();
 
-        // Flash rojo
         StartCoroutine(FlashGolpe());
-
-        // Si llega al 50% de vida, ponerse mas enojado
-        if (vidaActual == vidaMaxima / 2)
-            GameManagerBoss.Instance?.MostrarMensajeBoss("¡Está enojada! ¡CUIDADO!");
 
         if (vidaActual <= 0)
             StartCoroutine(SecuenciaMuerte());
@@ -130,11 +115,9 @@ public class FinalBoss : MonoBehaviour
 
     void ActualizarColorBarra()
     {
-        if (rellenoBarraVida == null) return;
-        float porcentaje = (float)vidaActual / vidaMaxima;
-        if      (porcentaje > 0.5f) rellenoBarraVida.color = colorVidaLlena;
-        else if (porcentaje > 0.25f) rellenoBarraVida.color = colorVidaMitad;
-        else                        rellenoBarraVida.color = colorVidaBaja;
+        if (fillBarra == null) return;
+        float p = (float)vidaActual / vidaMaxima;
+        fillBarra.color = p > 0.5f ? colorLlena : p > 0.25f ? colorMitad : colorBaja;
     }
 
     IEnumerator SecuenciaMuerte()
@@ -144,40 +127,34 @@ public class FinalBoss : MonoBehaviour
         PuedeSerGolpeado = false;
         if (col != null) col.enabled = false;
 
-        // Animacion de muerte epica
         float dur = 1.5f, t = 0f;
-        Vector3 escIni = transform.localScale;
+        Vector3 posBase = transform.position;
 
-        // Temblar antes de morir
         while (t < dur)
         {
             t += Time.deltaTime;
-            float shake = Mathf.Sin(t * 30f) * 0.05f * (1f - t/dur);
-            transform.position = posHoyo + Vector3.up * 0.3f + Vector3.right * shake;
-
-            float p = t / dur;
+            float shake = Mathf.Sin(t * 30f) * 0.05f * (1f - t / dur);
+            transform.position = posBase + Vector3.right * shake;
             Color c = sr.color;
-            c.r = 1f; c.g = Mathf.Lerp(1f, 0f, p); c.b = Mathf.Lerp(1f, 0f, p);
+            c.r = 1f; c.g = Mathf.Lerp(1f, 0f, t / dur); c.b = Mathf.Lerp(1f, 0f, t / dur);
             sr.color = c;
             yield return null;
         }
 
-        // Escalar a 0
-        t = 0f;
-        dur = 0.5f;
+        t = 0f; dur = 0.5f;
+        Vector3 escIni = transform.localScale;
         while (t < dur)
         {
             t += Time.deltaTime;
-            float p = t / dur;
-            transform.localScale = escIni * (1f - p);
+            transform.localScale = escIni * (1f - t / dur);
             yield return null;
         }
 
-        // Ocultar barra de vida
         if (barraVida != null) barraVida.gameObject.SetActive(false);
-
         AudioManager.Instance?.SonarMuerteSalamandra();
-        GameManagerBoss.Instance?.BossMuerto();
+
+        // Avisar al SpawnerBoss
+        SpawnerBoss.Instance?.NotificarBossMuerto();
         gameObject.SetActive(false);
     }
 }
